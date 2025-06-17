@@ -1,7 +1,7 @@
 'use client'
 
 import { useUser } from '@clerk/nextjs'
-import { SetStateAction, useState } from 'react'
+import { useState } from 'react'
 import { Card, CardContent } from './ui/card'
 import { Avatar, AvatarImage } from './ui/avatar'
 import { Textarea } from './ui/textarea'
@@ -24,7 +24,7 @@ function CreatePost() {
     setIsPosting(true)
     try {
       const result = await createPost(content, imageUrl)
-      if (result.success) {
+      if (result?.success) {
         // reset the form
         setContent('')
         setImageUrl('')
