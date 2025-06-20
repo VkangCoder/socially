@@ -27,6 +27,7 @@ function ImageUpload({ endpoint, onChange, value }: ImageUploadProps) {
       </div>
     )
   }
+  ;``
   return (
     <UploadDropzone
       endpoint={endpoint}
