@@ -4,27 +4,33 @@ import {
   getUserPosts,
   isFollowing,
 } from '@/actions/profile.action'
-import ProfilePageClient from '@/app/profile/[username]/ProfilePageClient'
 import { notFound } from 'next/navigation'
+import ProfilePageClient from './ProfilePageClient'
 
-interface IProfilePageProps {
-  params: {
-    username: string
-  }
-}
-
-export async function generateMetadata({ params }: IProfilePageProps) {
-  const user = await getProfileByUsername(params.username)
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ username: string }>
+}) {
+  const { username } = await params
+  const user = await getProfileByUsername(username)
   if (!user) return
+
   return {
-    title: ` ${user.name ?? user.username}`,
+    title: `${user.name ?? user.username}`,
     description: user.bio || `Check out ${user.username}'s profile.`,
   }
 }
 
-async function ProfilePageServer({ params }: IProfilePageProps) {
-  const user = await getProfileByUsername(params.username)
-  if (!user) return notFound()
+async function ProfilePageServer({
+  params,
+}: {
+  params: Promise<{ username: string }>
+}) {
+  const { username } = await params
+  const user = await getProfileByUsername(username)
+
+  if (!user) notFound()
 
   const [posts, likedPosts, isCurrentUserFollowing] = await Promise.all([
     getUserPosts(user.id),
